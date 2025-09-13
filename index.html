@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeHub - Programming Languages</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 50%, #2d3748 100%);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(15, 20, 25, 0.9);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #00d4ff;
+        }
+
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            background: #00d4ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+            display: flex;
+            gap: 2rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/placeholder.svg?height=600&width=800') center/cover;
+            opacity: 0.3;
+            border-radius: 20px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 500px;
+        }
+
+        .featured-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 1rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00d4ff, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .meta-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+        }
+
+        .hero-description {
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Languages Grid */
+        .languages-section {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #00d4ff;
+        }
+
+        .languages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+
+        .language-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .language-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .language-card:hover::before {
+            left: 100%;
+        }
+
+        .language-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #00d4ff;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .language-logo {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 0.5rem;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .language-name {
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .language-type {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* Floating Elements */
+        .floating-code {
+            position: fixed;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 1;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateX(-100px) translateY(0px);
+            }
+            to {
+                transform: translateX(calc(100vw + 100px)) translateY(-50px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .languages-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                max-height: none;
+            }
+        }
+
+        /* Custom Scrollbar */
+        .languages-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .languages-grid::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .languages-grid::-webkit-scrollbar-thumb {
+            background: #00d4ff;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Code Elements -->
+    <div class="floating-code" style="top: 10%; animation-delay: 0s;">console.log('Hello World');</div>
+    <div class="floating-code" style="top: 30%; animation-delay: 5s;">function() { return true; }</div>
+    <div class="floating-code" style="top: 50%; animation-delay: 10s;">import React from 'react';</div>
+    <div class="floating-code" style="top: 70%; animation-delay: 15s;">SELECT * FROM languages;</div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">CodeHub</div>
+        <ul class="nav-links">
+            <li><a href="#" onclick="filterLanguages('all')">All Languages</a></li>
+            <li><a href="#" onclick="filterLanguages('frontend')">Frontend</a></li>
+            <li><a href="#" onclick="filterLanguages('backend')">Backend</a></li>
+            <li><a href="#" onclick="filterLanguages('mobile')">Mobile</a></li>
+        </ul>
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="Search languages..." id="searchInput">
+            <div class="user-icon">C</div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-background"></div>
+            <div class="hero-content">
+                <img src="/placeholder.svg?height=120&width=120" alt="JavaScript" class="featured-logo" id="featuredLogo">
+                <h1 class="hero-title" id="featuredTitle">JavaScript</h1>
+                <div class="hero-meta">
+                    <span class="meta-item" id="featuredYear">1995</span>
+                    <span class="meta-item" id="featuredDifficulty">Beginner</span>
+                    <span class="meta-item" id="featuredType">Frontend</span>
+                </div>
+                <p class="hero-description" id="featuredDescription">
+                    The most popular programming language for web development. JavaScript enables interactive web pages and is an essential part of web applications. It runs on both client and server side.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary" onclick="startLearning()">▶ START LEARNING</a>
+                    <a href="#" class="btn btn-secondary" onclick="addToList()">+ MY LIST</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Languages Section -->
+        <section class="languages-section">
+            <h2 class="section-title">Popular Languages</h2>
+            <div class="languages-grid" id="languagesGrid">
+                <!-- Languages will be populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Language data
+        const languages = [
+            {
+                name: 'JavaScript',
+                type: 'Frontend',
+                year: '1995',
+                difficulty: 'Beginner',
+                logo: '/placeholder.svg?height=60&width=60',
+                description: 'The most popular programming language for web development. JavaScript enables interactive web pages and is an essential part of web applications.',
+                category: 'frontend'
+            },
+            {
+                name: 'Python',
+                type: 'Backend',
+                year: '1991',
+                difficulty: 'Beginner',
+                logo: '/placeholder.svg?height=60&width=60',
+                description: 'A versatile, high-level programming language known for its simplicity and readability. Perfect for beginners and powerful for experts.',
+                category: 'backend'
+            },
+            {
+                name: 'React',
+                type: 'Frontend',
+                year: '2013',
+                difficulty: 'Intermediate',
+                logo: '/placeholder.svg?height=60&width=60',
+                description: 'A JavaScript library for building user interfaces, especially single-page applications with dynamic, interactive elements.',
+                category: 'frontend'
+            },
+            {
+                name: 'Java',
+                type: 'Backend',
+                year: '1995',
+                difficulty: 'Intermediate',
+                logo: '/placeholder.svg?height=60&width=60',
+                description: 'A robust, object-oriented programming language used for enterprise applications, Android development, and web services.',
+                category: 'backend'
+            },
+            {
+                name: 'TypeScript',
+                type: 'Frontend',
+                year: '2012',
+                difficulty: 'Intermediate',
+                logo: '/placeholder.svg?height=60&width=60',
+                description: 'A typed superset of JavaScript that compiles to plain JavaScript, adding static type definitions for better development experience.',
+                category: 'frontend'
+            },
+            {
+                name: 'Swift',
+                type: 'Mobile',
+                year: '2014',
+                difficulty: 'Intermediate',
+                logo: '/placeholder.svg?height=60&width=60',
+                description: 'Apple\'s programming language for iOS, macOS, watchOS, and tvOS app development. Modern, safe, and fast.',
+                category: 'mobile'
+            },
+            {
+                name: 'Kotlin',
+                type: 'Mobile',
+                year: '2011',
+                difficulty: 'Intermediate',
+                logo: '/placeholder.svg?height=60&width=60',
+                description: 'A modern programming language for Android development, fully interoperable with Java and preferred by Google.',
+                category: 'mobile'
+            },
+            {
+                name: 'C++',
+                type: 'System',
+                year: '1985',
+                difficulty: 'Advanced',
+                logo: '/placeholder.svg?height=60&width=60',
+                description: 'A powerful, high-performance programming language used for system programming, game development, and embedded systems.',
+                category: 'backend'
+            },
+            {
+                name: 'Go',
+                type: 'Backend',
+                year: '2009',
+                difficulty: 'Intermediate',
+                logo: '/placeholder.svg?height=60&width=60',
+                description: 'A fast, statically typed language developed by Google, perfect for building scalable web services and cloud applications.',
+                category: 'backend'
+            },
+            {
+                name: 'Rust',
+                type: 'System',
+                year: '2010',
+                difficulty: 'Advanced',
+                logo: '/placeholder.svg?height=60&width=60',
+                description: 'A systems programming language focused on safety, speed, and concurrency. Memory-safe without garbage collection.',
+                category: 'backend'
+            },
+            {
+                name: 'Vue.js',
+                type: 'Frontend',
+                year: '2014',
+                difficulty: 'Beginner',
+                logo: '/placeholder.svg?height=60&width=60',
+                description: 'A progressive JavaScript framework for building user interfaces. Easy to learn and integrate with existing projects.',
+                category: 'frontend'
+            },
+            {
+                name: 'PHP',
+                type: 'Backend',
+                year: '1995',
+                difficulty: 'Beginner',
+                logo: '/placeholder.svg?height=60&width=60',
+                description: 'A server-side scripting language designed for web development. Powers many websites including WordPress and Facebook.',
+                category: 'backend'
+            }
+        ];
+
+        let currentLanguages = [...languages];
+        let featuredIndex = 0;
+
+        // Initialize the page
+        function init() {
+            renderLanguages();
+            updateFeaturedLanguage(languages[0]);
+            setupSearch();
+            startAutoRotation();
+        }
+
+        // Render languages grid
+        function renderLanguages() {
+            const grid = document.getElementById('languagesGrid');
+            grid.innerHTML = currentLanguages.map(lang => `
+                <div class="language-card" onclick="selectLanguage('${lang.name}')">
+                    <img src="${lang.logo}" alt="${lang.name}" class="language-logo">
+                    <div class="language-name">${lang.name}</div>
+                    <div class="language-type">${lang.type}</div>
+                </div>
+            `).join('');
+        }
+
+        // Update featured language
+        function updateFeaturedLanguage(language) {
+            document.getElementById('featuredLogo').src = language.logo.replace('60', '120');
+            document.getElementById('featuredTitle').textContent = language.name;
+            document.getElementById('featuredYear').textContent = language.year;
+            document.getElementById('featuredDifficulty').textContent = language.difficulty;
+            document.getElementById('featuredType').textContent = language.type;
+            document.getElementById('featuredDescription').textContent = language.description;
+        }
+
+        // Select language
+        function selectLanguage(name) {
+            const language = languages.find(lang => lang.name === name);
+            if (language) {
+                updateFeaturedLanguage(language);
+                showNotification(`Selected ${name}!`);
+            }
+        }
+
+        // Filter languages
+        function filterLanguages(category) {
+            if (category === 'all') {
+                currentLanguages = [...languages];
+            } else {
+                currentLanguages = languages.filter(lang => lang.category === category);
+            }
+            renderLanguages();
+        }
+
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                currentLanguages = languages.filter(lang => 
+                    lang.name.toLowerCase().includes(query) ||
+                    lang.type.toLowerCase().includes(query)
+                );
+                renderLanguages();
+            });
+        }
+
+        // Auto-rotation of featured language
+        function startAutoRotation() {
+            setInterval(() => {
+                featuredIndex = (featuredIndex + 1) % languages.length;
+                updateFeaturedLanguage(languages[featuredIndex]);
+            }, 8000);
+        }
+
+        // Action functions
+        function startLearning() {
+            showNotification('Starting learning journey! 🚀');
+        }
+
+        function addToList() {
+            showNotification('Added to your learning list! 📚');
+        }
+
+        // Notification system
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: linear-gradient(45deg, #00d4ff, #0099cc);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+                z-index: 2000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add CSS animations for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
